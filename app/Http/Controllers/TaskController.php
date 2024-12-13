@@ -59,6 +59,7 @@ class TaskController extends Controller
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);  
     }
+    
      /**
      * Display the specified resource.
      */
@@ -111,7 +112,7 @@ class TaskController extends Controller
     public function destroy($id)
     {
         Task::where('id', '=', $id) -> delete();
-        
+
         return response()->json([
             'message' => 'Task deleted successful',
             'links' => [
