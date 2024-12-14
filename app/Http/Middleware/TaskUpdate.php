@@ -16,10 +16,11 @@ class TaskUpdate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $taskId = $request -> route('id');        
+        $taskId = $request -> route('task');  
 
-
-        if (Task::where('id', '=', $taskId) -> exist()) {
+        if (Task::where('id', '=', $taskId) -> 
+                  exists()) 
+        {
             $validation = $request -> validate([
                 'name' => ['required'],
                 'piority' => ['required', 'integer', 'between:1,5'],

@@ -17,15 +17,8 @@ class CommentStore
     public function handle(Request $request, Closure $next): Response
     {
         $validation = $request -> validate([
-            'taskid' => ['required'],
             'text' => ['required']
         ]);
-
-        if (Task::where('id', '=', $request -> taskid) -> exists()) 
-        {
-            return $next($request);
-        }
-        
-        return redirect() -> json(['error' => 'Task not found'], 404);
+        return $next($request);
     }
 }

@@ -10,10 +10,10 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($tasks)
     {
 
-        $comments = Comment::get();
+        $comments = Comment::where('taskid', '=', $tasks) -> get();
 
         $commentsArray = $comments -> map(function ($comment) {
             return [
@@ -23,7 +23,7 @@ class CommentController extends Controller
                 'created_at' => $comment -> created_at,
                 'updated_at' => $comment -> updated_at,
                 'links' => [
-                    'delete' => route('comment.destroy', $comment -> id),
+                    'delete' => route('comment.destroy', ['tasks' => $comment -> taskid, 'id' => $comment -> id]),
                 ]
             ];
         });
@@ -35,10 +35,10 @@ class CommentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function store(Request $request)
+    public function store(Request $request, $tasks)
     {
         $newComment= Comment::create([
-            'taskid' => $request -> taskid,
+            'taskid' => $tasks,
             'text' => $request -> text,
         ]);
 
@@ -53,7 +53,7 @@ class CommentController extends Controller
             ],
             'links' => [
                 'self' => route('comment.index'),
-                'delete' => route('comment.destroy', $newComment -> id),
+                'delete' => route('comment.destroy', ['tasks' => $newComment -> taskid, 'id' => $newComment -> id]),
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);    
     }
@@ -61,14 +61,14 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($project)
+    public function destroy($tasks, $id)
     {
-        Comment::where('id', '=', $project) -> delete();
+        Comment::where('id', '=', $id) -> delete();
 
         return response() -> json([
             'message' => 'Comment deleted successfully',
             'links' => [
-                'self' => route('comment.index'),
+                'self' => route('comment.index', $tasks),
             ]
         ], 200, [], JSON_UNESCAPED_SLASHES);  
     }

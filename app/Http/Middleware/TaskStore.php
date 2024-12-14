@@ -17,16 +17,11 @@ class TaskStore
     public function handle(Request $request, Closure $next): Response
     {
         $validation = $request -> validate([
-            'projectid' => ['required', 'integer'],
             'name' => ['required'],
             'piority' => ['required', 'integer', 'between:1,5'],
             'deadline' => ['required', 'date', 'after:today']
         ]);
-        if (Project::where('id', '=', $request -> projectid) -> exists()) 
-        {
-            return $next($request);
-        }
-        
-        return redirect() -> json(['error' => 'Project not found'], 404);
+
+        return $next($request);
     }
 }

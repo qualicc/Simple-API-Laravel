@@ -10,9 +10,9 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($project)
     {
-        $tasks = Task::get();
+        $tasks = Task::where('projectid', '=', $project) -> get();
 
         $tasksArray = $tasks -> map(function ($task) {
             return [
@@ -21,9 +21,9 @@ class TaskController extends Controller
                 'piority' => $task -> piority,
                 'deadline' => $task -> deadline,
                 'links' => [
-                    'self' => route('tasks.show', $task -> id),
-                    'update' => route('tasks.update', $task -> id),
-                    'delete' => route('tasks.destroy', $task -> id),
+                    'self' => route('task.show', ['project' => $task -> projectid, 'task' => $task -> id]),
+                    'update' => route('task.update', ['project' => $task -> projectid, 'task' => $task -> id]),
+                    'delete' => route('task.destroy', ['project' => $task -> projectid, 'task' => $task -> id]),
                 ]
             ];
         });
@@ -35,10 +35,10 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $project)
     {
         $newTask = Task::create([
-            'projectid' => $request -> projectid,
+            'projectid' => $project,
             'name' => $request -> name,
             'piority' => $request -> piority,
             'deadline' => $request -> deadline,
@@ -53,9 +53,9 @@ class TaskController extends Controller
                 'deadline' => $newTask -> deadline,
             ],
             'links' => [
-                'self' => route('tasks.show', $newTask -> id),
-                'update' => route('tasks.update', $newTask -> id),
-                'delete' => route('tasks.destroy', $newTask -> id),
+                'self' => route('task.show', ['project' => $newTask -> projectid, 'task' => $newTask -> id]),
+                'update' => route('task.update', ['project' => $newTask -> projectid, 'task' => $newTask -> id]),
+                'delete' => route('task.destroy', ['project' => $newTask -> projectid, 'task' => $newTask -> id]),
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);  
     }
@@ -63,9 +63,9 @@ class TaskController extends Controller
      /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($project, $task)
     {
-        $task = Task::find($id);
+        $task = Task::find($project, $task);
         
         return response() -> json([
             'data' => [
@@ -75,9 +75,9 @@ class TaskController extends Controller
                 'deadline' => $task -> deadline,
             ],
             'links' => [
-                'self' => route('tasks.show', $task -> id),
-                'update' => route('tasks.update', $task -> id),
-                'delete' => route('tasks.destroy', $task -> id),
+                'self' => route('task.show', ['project' => $task -> projectid, 'task' => $task -> id]),
+                'update' => route('task.update', ['project' => $task -> projectid, 'task' => $task -> id]),
+                'delete' => route('task.destroy', ['project' => $task -> projectid, 'task' => $task -> id]),
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);  
     }
@@ -85,11 +85,11 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $project, $task)
     {
-        $task = Task::find($id);
+        dd(array($task,$project));
+        $task = Task::find($task);
 
-        $task -> projectid = $request -> projectid;
         $task -> name = $request -> name;
         $task -> piority = $request -> piority;
         $task -> deadline = $request -> deadline;
@@ -99,9 +99,9 @@ class TaskController extends Controller
         return response()->json([
             'message' => 'Task edited successful',
             'links' => [
-                'self' => route('tasks.show', $task->id),
-                'update' => route('tasks.update', $task->id),
-                'delete' => route('tasks.destroy', $task->id),
+                'self' => route('task.show', ['project' => $task -> projectid, 'task' => $task -> id]),
+                'update' => route('task.update', ['project' => $task -> projectid, 'task' => $task -> id]),
+                'delete' => route('task.destroy', ['project' => $task -> projectid, 'task' => $task -> id]),
             ]
         ], 200, [], JSON_UNESCAPED_SLASHES);
     }
@@ -109,15 +109,15 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($project, $task)
     {
-        Task::where('id', '=', $id) -> delete();
+        Task::where('id', '=', $task) -> delete();
 
         return response()->json([
             'message' => 'Task deleted successful',
             'links' => [
-                'create' => route('tasks.store'),
-                'list' => route('tasks.index'),
+                'create' => route('task.store', $project),
+                'list' => route('task.index', $project),
             ]
         ], 200, [], JSON_UNESCAPED_SLASHES); 
 

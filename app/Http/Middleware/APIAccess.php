@@ -15,7 +15,7 @@ class APIAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request['APIkey'] == env('API_KEY'))
+        if($request -> header('APIkey') == env('API_KEY'))
         {
             return $next($request);
         }

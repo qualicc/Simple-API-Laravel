@@ -10,9 +10,9 @@ class TeamMemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($project)
     {
-        $teams = TeamMember::get();
+        $teams = TeamMember::where('projectid', '=', $project) -> get();
 
         $teamsArray = $teams -> map(function ($team) {
             return [
@@ -22,7 +22,7 @@ class TeamMemberController extends Controller
                 'created_at' => $team -> created_at,
                 'updated_at' => $team -> updated_at,
                 'links' => [
-                    'delete' => route('team.destroy', $team -> id),
+                    'delete' => route('team.destroy', ['project' => $team -> projectid, 'user' => $team -> id]),
                 ]
             ];
         });
@@ -33,10 +33,10 @@ class TeamMemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $project)
     {
         $newTeamMember= TeamMember::create([
-            'projectid' => $request -> projectid,
+            'projectid' => $project,
             'name' => $request -> name,
         ]);
         return response()->json([
@@ -50,7 +50,7 @@ class TeamMemberController extends Controller
             ],
             'links' => [
                 'self' => route('team.index'),
-                'delete' => route('team.destroy', $newTeamMember -> id),
+                'delete' => route('team.destroy', ['project' => $newTeamMember -> projectid, 'user' => $newTeamMember -> id]),
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);    
     }
@@ -58,14 +58,14 @@ class TeamMemberController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($user)
+    public function destroy($user, $project)
     {
         TeamMember::where('id', '=', $user) -> delete();
 
         return response() -> json([
             'message' => 'Task deleted successfully',
             'links' => [
-                'self' => route('team.index'),
+                'self' => route('team.index', $project),
             ]
         ], 200, [], JSON_UNESCAPED_SLASHES);  
     }

@@ -17,14 +17,9 @@ class TeamStore
     public function handle(Request $request, Closure $next): Response
     {
         $validation = $request -> validate([
-            'projectid' => ['required'],
             'name' => ['required'],
-
         ]);
-        if (Project::where('id', '=', $request -> projectid) -> exists()) 
-        {
-            return $next($request);
-        }
-        return redirect() -> json(['error' => 'Project not found'], 404);
+
+        return $next($request);
     }
 }
