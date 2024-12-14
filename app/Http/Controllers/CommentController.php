@@ -52,7 +52,7 @@ class CommentController extends Controller
                 'updated_at' => $newComment -> updated_at,
             ],
             'links' => [
-                'self' => route('comment.index'),
+                'self' => route('comment.index', $newComment -> id),
                 'delete' => route('comment.destroy', ['tasks' => $newComment -> taskid, 'id' => $newComment -> id]),
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);    

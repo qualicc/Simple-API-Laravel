@@ -49,7 +49,7 @@ class TeamMemberController extends Controller
                 'updated_at' => $newTeamMember -> updated_at,
             ],
             'links' => [
-                'self' => route('team.index'),
+                'self' => route('team.index', $newTeamMember -> id),
                 'delete' => route('team.destroy', ['project' => $newTeamMember -> projectid, 'user' => $newTeamMember -> id]),
             ]
         ], 201, [], JSON_UNESCAPED_SLASHES);    
