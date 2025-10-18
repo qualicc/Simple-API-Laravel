@@ -11,7 +11,6 @@ class TeamMember extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'projectid',
         'name',
         'created_at',

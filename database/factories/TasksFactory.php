@@ -22,7 +22,7 @@ class TasksFactory extends Factory
         return [
             'projectid' => Project::factory(),
             'name' => fake() -> text(5),
-            'piority' => fake() -> numberBetween(1, 5),
+            'priority' => fake() -> numberBetween(1, 5),
             'deadline' => fake() -> dateTimeBetween('now', '+1 year'),
         ];
     }

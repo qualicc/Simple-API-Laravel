@@ -18,7 +18,7 @@ class TaskController extends Controller
             return [
                 'id' => $task -> id,
                 'name' => $task -> name,
-                'piority' => $task -> piority,
+                'priority' => $task -> priority,
                 'deadline' => $task -> deadline,
                 'links' => [
                     'self' => route('task.show', ['project' => $task -> projectid, 'task' => $task -> id]),
@@ -40,7 +40,7 @@ class TaskController extends Controller
         $newTask = Task::create([
             'projectid' => $project,
             'name' => $request -> name,
-            'piority' => $request -> piority,
+            'priority' => $request -> priority,
             'deadline' => $request -> deadline,
         ]);
 
@@ -49,7 +49,7 @@ class TaskController extends Controller
             'data' => [
                 'projectid' => $newTask -> projectid,
                 'name' => $newTask -> name,
-                'piority' => $newTask -> piority,
+                'priority' => $newTask -> priority,
                 'deadline' => $newTask -> deadline,
             ],
             'links' => [
@@ -71,7 +71,7 @@ class TaskController extends Controller
             'data' => [
                 'projectid' => $task -> projectid,
                 'name' => $task -> name,
-                'piority' => $task -> piority,
+                'priority' => $task -> priority,
                 'deadline' => $task -> deadline,
             ],
             'links' => [
@@ -91,7 +91,7 @@ class TaskController extends Controller
         $task = Task::find($task);
 
         $task -> name = $request -> name;
-        $task -> piority = $request -> piority;
+        $task -> priority = $request -> priority;
         $task -> deadline = $request -> deadline;
 
         $task -> save();

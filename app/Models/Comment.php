@@ -11,7 +11,6 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'taskid',
         'text',
         'created_at',

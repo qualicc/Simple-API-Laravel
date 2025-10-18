@@ -18,7 +18,7 @@ class TaskStore
     {
         $validation = $request -> validate([
             'name' => ['required'],
-            'piority' => ['required', 'integer', 'between:1,5'],
+            'priority' => ['required', 'integer', 'between:1,5'],
             'deadline' => ['required', 'date', 'after:today']
         ]);
 

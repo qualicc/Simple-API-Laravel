@@ -11,7 +11,6 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'name',
         'description',
         'deadline',

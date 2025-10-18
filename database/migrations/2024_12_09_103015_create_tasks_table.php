@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('projectid');
             $table->foreign('projectid')->references('id')->on('projects')->onDelete('cascade');
             $table->text('name');
-            $table->enum('piority',['1','2','3','4','5']);
+            $table->enum('priority',['1','2','3','4','5']);
             $table->date('deadline');
             $table->timestamps();
         });
